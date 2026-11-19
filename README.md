@@ -110,6 +110,23 @@ Run it whenever you finish a chunk of work. It backfills any days it missed:
 - Commands never hardcode project specifics. They read `.claude/project.md` for your repo, branch, paths, and labels. Edit that one file and every command adapts.
 - `.claude/rules.md` holds your git and code conventions; the commands follow them.
 
+## Why `/bugfix`, not `/bug`
+
+`/bug` is a built-in Claude Code command that submits a report to Anthropic's feedback channel (shared with `/feedback` and `/share`). This kit names its bug-planning command `/bugfix` so it never shadows that built-in or invites an accidental submission.
+
+A few facts about the built-in `/bug`, since they are easy to get wrong:
+
+- It never sends anything automatically. A report goes out only when you confirm it on a review screen, and your conversation transcript is included only if you explicitly opt in there. By default it sends just your report text plus some metadata (version, OS, model, recent request IDs).
+- Submitted feedback is retained by Anthropic for 5 years, longer than normal session data, and may be used for product improvement. It is not used to train models unless you opt into the Developer Partner Program, or use a consumer account with data sharing enabled. See [Anthropic's data-usage docs](https://code.claude.com/docs/en/data-usage).
+
+If you would rather remove the built-in feedback commands entirely, disable them in settings:
+
+```json
+{ "env": { "DISABLE_FEEDBACK_COMMAND": "1" } }
+```
+
+That turns off `/bug`, `/feedback`, and `/share`. This repo's own `.claude/settings.json` sets it.
+
 ## Origin stack
 
 These commands were built and used on a specific stack: Next.js, TypeScript, and Tailwind on the front end; Supabase for database, auth, and migrations; Vercel for hosting; Sentry for error tracking; and GitHub for issues and PRs.
