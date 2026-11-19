@@ -1,0 +1,10 @@
+# Words that must never be committed to this public repo.
+# One entry per line. Blank lines and lines starting with "#" are ignored.
+# Matching is case-insensitive substring (so "masa" also catches "Masayuki").
+#
+# This file lives under .githooks/ and is itself excluded from the scan,
+# so listing the words here does not trip the guard.
+aray
+resry
+kishi
+masa

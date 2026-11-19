@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Backstop: before pushing, scan ALL tracked content for denylisted words.
+# Catches anything that slipped past pre-commit (e.g. a --no-verify commit).
+set -euo pipefail
+
+source "$(dirname "$0")/_scan.sh"
+pattern="$(build_pattern)"
+[ -z "$pattern" ] && exit 0
+
+# git grep searches file CONTENT (not paths); exclude the hook dir.
+if git grep -nIiE "$pattern" -- . ':(exclude).githooks/*' >/dev/null 2>&1; then
+  echo "Push blocked: tracked content matches the denylist (.githooks/denylist.txt):"
+  git grep -nIiE "$pattern" -- . ':(exclude).githooks/*' | sed 's/^/  /'
+  echo ""
+  echo "Fix the files above (or edit the denylist) before pushing."
+  exit 1
+fi
